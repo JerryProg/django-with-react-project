@@ -1,0 +1,11 @@
+###### Requirements without Version Specifiers ######
+django
+djangorestframework
+## Database ##
+psycopg2
+## Environment variables
+python-decouple
+
+## Oauth2.0 ##
+#django-oauth-toolkit
+###### Requirements with Version Specifiers ######
