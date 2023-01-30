@@ -60,15 +60,16 @@ def GetAllValidIpAddress(result, givenString,
 	# So we remove four index from the end
 	ipAddress = ipAddress[:-4]
 
+	# return result
 
 	# givenString = list("1921680")
 
 	# Fill result vector with all valid ip-addresses
 	# result = []
-	GetAllValidIpAddress(result, givenString, 0, 0, [])
+	# GetAllValidIpAddress(result, givenString, 0, 0, [])
 
 	# Print all the generated ip-addresses
-	for i in range(len(result)) :
-		ip_combinations= "".join(result[i])
+	# for i in range(len(result)) :
+	# 	ip_combinations= "".join(result[i])
 
-	return ip_combinations
+	# return ip_combinations
