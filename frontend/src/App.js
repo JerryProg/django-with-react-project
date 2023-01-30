@@ -16,28 +16,30 @@ import axios from "axios";
 // ];
 
 class App extends Component{
-    state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       viewCompleted: false,
+      ipList: [],
       activeItem: {
         ip_address: "",
         ip_combination: "",
         ip_joined: "",
-        completed: false
+        completed: false,
       },
-      ipList: []
     };
- 
-  async componentDidMount() {
-    try{
-      const res = await fetch('http://localhost:8000/info');
-      const ipList = await res.json();
-      this.setState({
-        ipList
-      })
-    } catch (e) {
-      console.log(e);
-    }
   }
+
+  componentDidMount() {
+    this.refreshList();
+  }
+
+  refreshList = () => {
+    axios
+      .get("/info/")
+      .then((res) => this.setState({ ipList: res.data }))
+      .catch((err) => console.log(err));
+  };
 
   toggle = () => {
     this.setState({ modal: !this.state.modal });
@@ -47,17 +49,25 @@ class App extends Component{
     this.toggle();
     if (item.id) {
       axios
-        .put(`http://localhost:8000/info/${item.id}/`, item)
+        .put(`/info/${item.id}/`, item)
+        .then((res) => this.refreshList());
       return;  
     }
     axios
-      .post("http://localhost:8000/info/", item)
+      .post("/info/", item)
+      .then((res) => this.refreshList());
   };
 
   createItem = () => {
     const item = {ip_address: "", completed: false };
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
+
+  handleDelete = (item) => {
+    axios
+      .delete('/info/${item.id}')
+      .then((res) => this.refreshList());
+  }
 
   displayCompleted = status => {
     if (status) {
@@ -68,16 +78,16 @@ class App extends Component{
 
   renderTabList = () => {
     return (
-      <div className="my-5 tab-list">
+      <div className="nav nav-list">
         <button 
           onClick={() => this.displayCompleted(true)}
-          className={this.state.viewCompleted ? "active" : ""}
+          className={this.state.viewCompleted ? "nav-link active" : "nav-link"}
         >
           Completo
         </button>
         <button 
           onClick={() => this.displayCompleted(false)}
-          className={this.state.viewCompleted ? "" : "active"}
+          className={this.state.viewCompleted ? "nav-link" : "active"}
         >
           Incompleto
         </button>
@@ -90,21 +100,30 @@ class App extends Component{
     const newItem = this.state.ipList.filter(
       item => item.completed === viewCompleted
     );
-    return newItem.map(item => 
+    return newItem.map(item => (
         <li 
           key={item.id}
           className="list-group-item d-flex justify-content-between align-items-center"
         >
           <span 
-            className={`title mr-2 ${
+            className={`ip_title mr-2 ${
               this.state.viewCompleted ? "completed-todo" : ""
             }`}
-            title={item.ip_address}
+            title={item.ip_combination}
             >
               {item.ip_address}
             </span>
+            <span>
+              <button
+                className="btn btn-secondary mr-2"
+                onClick={() => this.editItem(item)}
+              >
+                Editar
+              </button>
+
+            </span>
         </li>      
-      )
+      ));
   }
 
   render() {
@@ -114,7 +133,7 @@ class App extends Component{
         <div className="row">
           <div className="col-md-6 col-sm-10 mx-auto p-0">
             <div className="card p-3">
-              <div className="">
+              <div className="mb-4">
                 <button onClick={this.createItem} className="btn btn-primary">Nueva Ip</button>
               </div>
               {this.renderTabList()}

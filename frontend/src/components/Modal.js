@@ -43,7 +43,7 @@ export default class CustomModal extends Component {
               <Label for="title">Numero</Label>
               <Input
                 type="text"
-                id="title"
+                id="ip_title"
                 name="title"
                 value={this.state.activeItem.ip_address}
                 onChange={this.handleChange}
