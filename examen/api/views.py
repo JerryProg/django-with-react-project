@@ -13,11 +13,12 @@ class IpListView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         result = []
+        cadena = []
         ip_address = self.request.data.get("ip_address", None)
         combinations = GetAllValidIpAddress(result, list(ip_address), 0, 0, [])
         
         for i in range(len(result)):
-            cadena = "".join(result[i])
+            cadena.append("".join(result[i]))
         
-        serializer.save(ip_combinations=result)
+        serializer.save(ip_combinations=cadena)
         

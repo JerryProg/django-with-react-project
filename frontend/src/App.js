@@ -69,63 +69,6 @@ class App extends Component{
       .then((res) => this.refreshList());
   }
 
-  displayCompleted = status => {
-    if (status) {
-      return this.setState({ viewCompleted: true});
-    }
-    return this.setState({ viewCompleted: false});
-  };
-
-  renderTabList = () => {
-    return (
-      <div className="nav nav-list">
-        <button 
-          onClick={() => this.displayCompleted(true)}
-          className={this.state.viewCompleted ? "nav-link active" : "nav-link"}
-        >
-          Completo
-        </button>
-        <button 
-          onClick={() => this.displayCompleted(false)}
-          className={this.state.viewCompleted ? "nav-link" : "active"}
-        >
-          Incompleto
-        </button>
-      </div>  
-    );
-  };
-
-  renderItems = () => {
-    const { viewCompleted } = this.state;
-    const newItem = this.state.ipList.filter(
-      item => item.completed === viewCompleted
-    );
-    return newItem.map(item => (
-        <li 
-          key={item.id}
-          className="list-group-item d-flex justify-content-between align-items-center"
-        >
-          <span 
-            className={`ip_title mr-2 ${
-              this.state.viewCompleted ? "completed-todo" : ""
-            }`}
-            title={item.ip_combination}
-            >
-              {item.ip_address}
-            </span>
-            <span>
-              <button
-                className="btn btn-secondary mr-2"
-                onClick={() => this.editItem(item)}
-              >
-                Editar
-              </button>
-
-            </span>
-        </li>      
-      ));
-  }
-
   render() {
     return(
       <main className="content">
