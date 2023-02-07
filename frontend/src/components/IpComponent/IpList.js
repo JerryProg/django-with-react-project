@@ -5,11 +5,11 @@ import IpItem from './IpItem';
 const IpList = () => {
     const [ips, setIps] = useState([]);
 
-    const listIp = async () => {
+    const listIps = async () => {
         try{
-            const res = await IpServer.ipList();
+            const res = await IpServer.listIps();
             const data = await res.json();
-            //console.log(data)
+            // console.log(data)
             setIps(data);
         }catch(error){
             console.log(error);
@@ -17,16 +17,16 @@ const IpList = () => {
     };
 
     useEffect(() => {
-        listIp();
+        listIps();
     }, []);
 
     return(
         <div className="row">
             {ips.map((ip) => (
-                <IpItem key={ip.id} ip={ip}/>
+                <IpItem key={ip.id} ip={ip} />
             ))}
         </div>
-    )
+    );
 };
 
 export default IpList;
